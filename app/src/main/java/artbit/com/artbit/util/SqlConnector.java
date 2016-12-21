@@ -18,14 +18,12 @@ public class SqlConnector {
 
     private final String TAG = "SqlConnector";
 
-    private static volatile SqlConnector connector;
+    private static SqlConnector connector = new SqlConnector();
 
     private SqlConnector() {
     }
 
-    public static synchronized SqlConnector getInstance() {
-        if (connector == null)
-            connector = new SqlConnector();
+    public static SqlConnector getInstance() {
         return connector;
     }
 
@@ -79,7 +77,9 @@ public class SqlConnector {
         try {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
             StringBuilder builder = new StringBuilder();
-            while ((bufferedReader.readLine()) != null) builder.append(bufferedReader.readLine());
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null)
+                builder.append(line);
             result = builder.toString();
         } catch (IOException e) {
             Log.e(TAG, "Write Error");
